@@ -1,6 +1,7 @@
 /* eslint-disable */
 <template>
   <div class="app">
+    <!-- <amplify-authenticator> -->
     <h1>Todo App</h1>
     <input type="text" v-model="name" placeholder="Todo name" />
     <input type="text" v-model="description" placeholder="Todo description" />
@@ -12,6 +13,7 @@
         <br />
       </li>
     </ul>
+    <!-- </amplify-authenticator> -->
   </div>
 </template>
 
@@ -19,8 +21,13 @@
 import { API } from "aws-amplify";
 import { createTodo } from "./graphql/mutations";
 import { listTodos } from "./graphql/queries";
+// import { AmplifyAuthenticator } from "@aws-amplify/ui-vue";
+import { Auth } from 'aws-amplify';
 
 export default {
+  // components: {
+  //   AmplifyAuthenticator,
+  // },
   name: "App",
   async created() {
     this.getTodos();
@@ -46,6 +53,8 @@ export default {
       this.description = "";
     },
     async getTodos() {
+      console.log(Auth.Credentials.configure());
+      
       const todos = await API.graphql({
         query: listTodos,
       });
