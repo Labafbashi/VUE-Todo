@@ -2,9 +2,10 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 
-import Amplify from "aws-amplify";
-import awsmobile from "./aws-exports";
+import { API } from "@aws-amplify/api";
+import awsconfig from "./aws-exports";
 // import { applyPolyfills, defineCustomElements } from "aws-amplify";
+API.configure(awsconfig);
 
 createApp(App).mount("#app");
 // Amplify.configure({

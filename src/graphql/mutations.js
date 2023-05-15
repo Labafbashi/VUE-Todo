@@ -43,3 +43,13 @@ export const deleteTodo = /* GraphQL */ `
     }
   }
 `;
+export const deleteAllTodos = /* GraphQL */ `
+  mutation DeleteAllTodos {
+    deleteTodos {
+      items {
+        id
+      }
+    }
+  }
+`;
+

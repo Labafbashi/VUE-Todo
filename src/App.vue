@@ -6,14 +6,13 @@
     <input type="text" v-model="name" placeholder="Todo name" />
     <input type="text" v-model="description" placeholder="Todo description" />
     <button v-on:click="createTodo">Create Todo</button>
-    <ul>
+    <ul v-if="todos.length > 0">
       <li v-for="item in todos" :key="item.id">
         {{ item.name }}
         <p>{{ item.description }}</p>
-        <br />
       </li>
     </ul>
-    <!-- </amplify-authenticator> -->
+    <div v-else>No todos found.</div>
   </div>
 </template>
 
@@ -21,13 +20,7 @@
 import { API } from "aws-amplify";
 import { createTodo } from "./graphql/mutations";
 import { listTodos } from "./graphql/queries";
-// import { AmplifyAuthenticator } from "@aws-amplify/ui-vue";
-import { Auth } from 'aws-amplify';
-
 export default {
-  // components: {
-  //   AmplifyAuthenticator,
-  // },
   name: "App",
   async created() {
     this.getTodos();
@@ -53,12 +46,21 @@ export default {
       this.description = "";
     },
     async getTodos() {
-      console.log(Auth.Credentials.configure());
-      
-      const todos = await API.graphql({
-        query: listTodos,
-      });
-      this.todos = todos.data.listTodos.items;
+      try {
+        const todos = await API.graphql({
+          query: listTodos,
+        });
+        if (todos.length === 0) {
+          // Handle case when todos array is empty
+          console.log("No todos found.");
+        } else {
+          // Update todos array with fetched data
+          this.todos = todos;
+          //this.todos = todos.data.listTodos.items;
+        }
+      } catch (error) {
+        console.log("An error occurred while fetching todos: ", error);
+      }
     },
   },
 };
